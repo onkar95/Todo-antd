@@ -11,10 +11,10 @@ export const DataProvider = ({ children }) => {
     const [edit, setedit] = useState(false);
     const [editRecord, seteditRecord] = useState(null);
     const [added, setadded] = useState(true);
-
+    const w = window.innerWidth
     useEffect(() => {
         setWidth(window.innerWidth);
-    }, [window.innerWidth, window.innerHeight]);
+    }, [ w]);
 
     return (
         <DataContext.Provider value={{

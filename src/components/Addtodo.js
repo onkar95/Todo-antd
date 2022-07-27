@@ -12,11 +12,11 @@ import moment from 'moment';
 import DataContext from '../context/Todo';
 
 const Addtodo = () => {
-    const {  Data, setadded } = useContext(DataContext);
+    const { Data, setadded } = useContext(DataContext);
     const { TextArea } = Input;
     const dateFormatList = ['DD/MM/YYYY', 'DD/MM/YY'];
     const { RangePicker } = DatePicker;
-
+    const [form] = Form.useForm();
     function formatDate(date) {
         var d = new Date(date),
             month = '' + (d.getMonth() + 1),
@@ -43,13 +43,19 @@ const Addtodo = () => {
         }
         Data.push(Obj)
         localStorage.setItem("notes", JSON.stringify(Data))
-        setadded(()=>false)
+        form.resetFields();
+        setadded(() => false)
     }
 
     return (
         <div style={{ margin: 20 }}>
             <Form
-                onFinish={(values) => handelsubmit(values)}
+                  form={form}
+                onFinish={(values) => {
+                    handelsubmit(values)
+                    console.log(values)
+                }}
+
             >
 
                 <Form.Item label="Title" name='title'>
@@ -58,7 +64,7 @@ const Addtodo = () => {
                 <Form.Item label="description" name='description'>
                     <TextArea rows={4} />
                 </Form.Item>
-               
+
                 <Form.Item label="Date" name='date'>
                     <RangePicker
                         defaultValue={[moment(formatDate(Date.now()), dateFormatList[0]), moment(formatDate(Date.now()), dateFormatList[0])]}
