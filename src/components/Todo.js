@@ -1,23 +1,20 @@
-import React, { useState, useRef } from 'react'
+import React, { useState, useRef, useContext } from 'react'
 import { Space, Table, Tag, Modal } from 'antd';
 import 'antd/dist/antd.min.css'
 import {
     Button,
-    DatePicker,
-    Form,
     Input,
-    Select,
 } from 'antd';
 import Edittodo from './Edittodo';
 import { SearchOutlined } from '@ant-design/icons';
 import Highlighter from 'react-highlight-words';
 import { Header } from 'antd/lib/layout/layout';
+import DataContext from '../context/Todo';
 
 
-const Todo = ({ setData, Data }) => {
-    console.log("todo", Data)
-    const [edit, setedit] = useState(false);
-    const [editRecord, seteditRecord] = useState(null);
+const Todo = () => {
+    const { setData, Data, FilterData, seteditRecord, setedit } = useContext(DataContext);
+
 
     const [searchText, setSearchText] = useState('');
     const [searchedColumn, setSearchedColumn] = useState('');
@@ -117,7 +114,8 @@ const Todo = ({ setData, Data }) => {
                 text
             ),
     });
-    // const search=Data.search()
+
+
     const columns = [
         {
             title: 'Created at',
@@ -125,12 +123,14 @@ const Todo = ({ setData, Data }) => {
             key: 'createdAt',
             ellipsis: true,
             sorter: (a, b) => a.createdAt - b.createdAt,
+            with: 100,
         },
         {
             title: 'Title',
             dataIndex: 'title',
             key: 'title',
             ellipsis: true,
+            with: 100,
             sorter: (a, b) => a.title - b.title,
         },
         {
@@ -138,6 +138,7 @@ const Todo = ({ setData, Data }) => {
             dataIndex: 'description',
             key: 'description',
             ellipsis: true,
+            with: 100,
             sorter: (a, b) => a.description.length - b.description.length,
 
         },
@@ -146,6 +147,7 @@ const Todo = ({ setData, Data }) => {
             dataIndex: 'dueDate',
             key: 'dueDate',
             ellipsis: true,
+            with: 100,
             sorter: (a, b) => a.dueDate - b.dueDate,
         },
         {
@@ -153,6 +155,7 @@ const Todo = ({ setData, Data }) => {
             key: 'tags',
             dataIndex: 'tags',
             ellipsis: true,
+            with: 100,
             filters: [
                 {
                     text: 'NICE',
@@ -193,6 +196,7 @@ const Todo = ({ setData, Data }) => {
             dataIndex: 'status',
             key: 'status',
             ellipsis: true,
+            with: 100,
             filters: [
                 {
                     text: 'completed',
@@ -221,6 +225,7 @@ const Todo = ({ setData, Data }) => {
             title: 'Action',
             key: 'action',
             ellipsis: true,
+            with: 100,
             render: (_, record) => (
                 <>
                     <button onClick={() => handeldelete(record)}>delete</button>
@@ -245,29 +250,30 @@ const Todo = ({ setData, Data }) => {
 
     }
     const handeledit = (record) => {
-
-        console.log(record)
-        seteditRecord({ ...record })
-        if (editRecord != null) setedit(true)
-        console.log(editRecord)
+        setedit(true)
+        seteditRecord(() => record)
     }
-
-    const { TextArea } = Input;
-    const { RangePicker } = DatePicker;
-    const dateFormat = 'YYYY/MM/DD';
-    // console.log("recf", record)
-
 
 
     return (
         <div>
-            <Header > <h1 style={{textAlign:"center"}}>Table</h1></Header>
-           
-            <div>
-                <Table columns={columns} dataSource={Data}
-                    pagination={{ defaultPageSize: 3, position: ["bottomCenter"] }} />
+            <Header > <h1 style={{ textAlign: "center", color: "white" }}>Table</h1></Header>
 
-                <Edittodo setData={setData} Data={Data} edit={edit} setedit={setedit} editRecord={editRecord} seteditRecord={seteditRecord} />
+            <div>
+                {FilterData[0] === undefined ?
+                    < Table columns={columns} dataSource={Data}
+                        scroll={{
+                            x: 1300,
+                        }}
+                        pagination={{ defaultPageSize: 6, position: ["bottomCenter"] }} />
+                    : < Table columns={columns} dataSource={FilterData}
+                        pagination={{ defaultPageSize: 6, position: ["bottomCenter"] }}
+                        scroll={{
+                            x: 1300,
+                        }}
+                    />
+                }
+                <Edittodo />
             </div>
 
         </div >

@@ -1,23 +1,22 @@
 
-
 import {
     Button,
-    Card,
     DatePicker,
     Form,
     Input,
     Select,
 } from 'antd';
-import React from 'react';
+import React, { useContext } from 'react';
 import 'antd/dist/antd.min.css'
 import moment from 'moment';
+import DataContext from '../context/Todo';
 
-const Addtodo = ({ setchange, Data }) => {
-
+const Addtodo = () => {
+    const {  Data, setadded } = useContext(DataContext);
     const { TextArea } = Input;
-    // const dateFormatList = ['DD/MM/YYYY', 'DD/MM/YY'];
-    const dateFormat = 'YYYY/MM/DD';
+    const dateFormatList = ['DD/MM/YYYY', 'DD/MM/YY'];
     const { RangePicker } = DatePicker;
+
     function formatDate(date) {
         var d = new Date(date),
             month = '' + (d.getMonth() + 1),
@@ -33,9 +32,6 @@ const Addtodo = ({ setchange, Data }) => {
     }
 
     const handelsubmit = (e) => {
-        console.log(e)
-        console.log(formatDate(e?.date[0]?._d))
-        console.log(formatDate(e?.date[1]?._d))
         const Obj = {
             key: parseInt(Math.random() * 100),
             createdAt: formatDate(e?.date[0]?._d),
@@ -47,10 +43,11 @@ const Addtodo = ({ setchange, Data }) => {
         }
         Data.push(Obj)
         localStorage.setItem("notes", JSON.stringify(Data))
-        // setchange("ok")
+        setadded(()=>false)
     }
+
     return (
-        <div style={{  margin: 20 }}>
+        <div style={{ margin: 20 }}>
             <Form
                 onFinish={(values) => handelsubmit(values)}
             >
@@ -61,18 +58,11 @@ const Addtodo = ({ setchange, Data }) => {
                 <Form.Item label="description" name='description'>
                     <TextArea rows={4} />
                 </Form.Item>
-                {/* <Form.Item label="createdAt" name='createdAt'>
-
-<DatePicker format={dateFormatList} />
-</Form.Item>
-                <Form.Item label="dueDate" name='dueDate'>
-
-                <DatePicker format={dateFormatList} />
-                </Form.Item> */}
+               
                 <Form.Item label="Date" name='date'>
                     <RangePicker
-                        defaultValue={[moment('2015/01/01', dateFormat), moment('2015/01/01', dateFormat)]}
-                        format={dateFormat}
+                        defaultValue={[moment(formatDate(Date.now()), dateFormatList[0]), moment(formatDate(Date.now()), dateFormatList[0])]}
+                        format={dateFormatList[0]}
                     />
                 </Form.Item>
                 <Form.Item label="tags" name='tags'>
