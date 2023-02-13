@@ -12,7 +12,7 @@ import 'antd/dist/antd.min.css'
 import DataContext from '../context/Todo';
 
 const Edittodo = () => {
-    const { Data, editRecord, seteditRecord, edit, setedit, setadded, added } = useContext(DataContext);
+    const { Data, setData, editRecord, seteditRecord, edit, setedit, setadded, added } = useContext(DataContext);
     const { RangePicker } = DatePicker;
     const { TextArea } = Input;
     const dateFormatList = ['DD/MM/YYYY', 'DD/MM/YY'];
@@ -49,6 +49,7 @@ const Edittodo = () => {
                         }
                     })
                     localStorage.setItem("notes", JSON.stringify(Edited))
+                    setData(Edited)
                     setedit(false)
                     setadded((pre) => added === true ? false : true)
                     seteditRecord(null)
@@ -84,9 +85,9 @@ const Edittodo = () => {
                         <Select placeholder='select status' value={editRecord?.status}
                             onChange={(e) => { seteditRecord(val => { return { ...val, status: e } }) }}
                         >
-                            <Select.Option value="Open">Open</Select.Option>
+                            <Select.Option value="completed">completed</Select.Option>
                             <Select.Option value="Working">Working</Select.Option>
-                            <Select.Option value="Done">Done</Select.Option>
+                            <Select.Option value="Open">Open</Select.Option>
                             <Select.Option value="Overdue">Overdue</Select.Option>
                         </Select>
                     </Form.Item>

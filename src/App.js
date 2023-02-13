@@ -39,8 +39,10 @@ function App() {
           <Layout>
             <Header> <h1 style={{ textAlign: "center", color: "white" }}> TO-DO App </h1></Header>
             <Content style={{ margin: "15px" }}>
-              <Searchbar />
-              <Todo />
+              <div className='todo'>
+                <Searchbar />
+                <Todo />
+              </div>
 
             </Content>
           </Layout>
@@ -49,8 +51,10 @@ function App() {
         <div >
           <Header > <h1 style={{ textAlign: "center", color: "white" }}>Add TO-DO </h1></Header>
           <Addtodo />
-          <Searchbar />
-          <Todo />
+          <div className='todo'>
+            <Searchbar />
+            <Todo />
+          </div>
 
         </div>
       }

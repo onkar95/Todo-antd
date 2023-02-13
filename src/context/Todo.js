@@ -14,7 +14,11 @@ export const DataProvider = ({ children }) => {
     const w = window.innerWidth
     useEffect(() => {
         setWidth(window.innerWidth);
-    }, [ w]);
+    }, [w]);
+
+    // useEffect(() => {
+    //     if (edit) setData([...Data, editRecord]);
+    // }, [editRecord]);
 
     return (
         <DataContext.Provider value={{

@@ -93,7 +93,7 @@ const Todo = () => {
             />
         ),
         onFilter: (value, record) =>
-            record[dataIndex].toString().toLowerCase().includes(value.toLowerCase()),
+            record[dataIndex]?.toString().toLowerCase().includes(value.toLowerCase()),
         onFilterDropdownVisibleChange: (visible) => {
             if (visible) {
                 setTimeout(() => searchInput.current?.select(), 100);
@@ -131,7 +131,7 @@ const Todo = () => {
             key: 'title',
             ellipsis: true,
             with: 100,
-            sorter: (a, b) => a.title - b.title,
+            sorter: (a, b) => a.title.length - b.title.length,
         },
         {
             title: 'Description',
@@ -148,7 +148,10 @@ const Todo = () => {
             key: 'dueDate',
             ellipsis: true,
             with: 100,
-            sorter: (a, b) => a.dueDate - b.dueDate,
+            sorter: (a, b) => {
+                console.log(a.dueDate, b.dueDate)
+                return a.dueDate - b.dueDate
+            },
         },
         {
             title: 'Tags',
@@ -170,7 +173,7 @@ const Todo = () => {
             // specify the condition of filtering result
             // here is that finding the name started with `value`
             ...getColumnSearchProps('tags', "status"),
-            sorter: (a, b) => a.tags.length - b.tags.length,
+            sorter: (a, b) => a.tags ? a.tags.length : 0 - b.tags ? b.tags.length : 0,
             sortDirections: ['descend', 'ascend'],
             render: (_, record) => (
                 <>
@@ -218,7 +221,7 @@ const Todo = () => {
             ],
             // specify the condition of filtering result
             // here is that finding the name started with `value`
-            onFilter: (value, record) => record.status.indexOf(value) === 0,
+            onFilter: (value, record) => record?.status?.indexOf(value) === 0,
         },
 
         {
@@ -256,7 +259,7 @@ const Todo = () => {
 
 
     return (
-        <div>
+        <div >
             <Header > <h1 style={{ textAlign: "center", color: "white" }}>Table</h1></Header>
 
             <div>
